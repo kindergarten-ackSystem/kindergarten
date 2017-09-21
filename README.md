@@ -11,3 +11,5 @@ rabbitmq用户名/密码：guest/guest
 
 druid监控地址：http://localhost:8080/druid/login.html  
 druid用户名/密码：druid/druid 
+
+测试修改
