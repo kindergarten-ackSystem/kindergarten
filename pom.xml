@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.songjiuhua.project</groupId>
+    <groupId>com.kindergarten</groupId>
     <artifactId>kindergarten</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -136,7 +136,7 @@
     </dependencies>
 
     <build>
-        <finalName>project</finalName>
+        <finalName>kindergarten</finalName>
         <plugins>
 
             <plugin>
@@ -153,24 +153,24 @@
                 </configuration>
                 <version>3.0</version>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-eclipse-plugin</artifactId>
-                <configuration>
-                    <wtpContextName>/</wtpContextName>
-                    <wtpversion>2.0</wtpversion>
-                    <projectNameTemplate>project</projectNameTemplate>
-                    <additionalConfig>
-                        <file>
-                            <name>.settings/org.eclipse.core.resources.prefs</name>
-                            <content>
-                                <![CDATA[eclipse.preferences.version=1${line.separator}encoding/<project>=${project.build.sourceEncoding}${line.separator}]]>
-                            </content>
-                        </file>
-                    </additionalConfig>
-                </configuration>
-                <version>2.9</version>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-eclipse-plugin</artifactId>-->
+                <!--<configuration>-->
+                    <!--<wtpContextName>/</wtpContextName>-->
+                    <!--<wtpversion>2.0</wtpversion>-->
+                    <!--<projectNameTemplate>project</projectNameTemplate>-->
+                    <!--<additionalConfig>-->
+                        <!--<file>-->
+                            <!--<name>.settings/org.eclipse.core.resources.prefs</name>-->
+                            <!--<content>-->
+                                <!--<![CDATA[eclipse.preferences.version=1${line.separator}encoding/<project>=${project.build.sourceEncoding}${line.separator}]]>-->
+                            <!--</content>-->
+                        <!--</file>-->
+                    <!--</additionalConfig>-->
+                <!--</configuration>-->
+                <!--<version>2.9</version>-->
+            <!--</plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
