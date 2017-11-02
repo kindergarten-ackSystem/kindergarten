@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="TrainNewsDto">
+    <resultMap id="resultMap" type="com.kindergarten.business.model.TrainNewsDto">
+        <result column="id" property="id"/>
+        <result column="news_title" property="newsTitle"/>
+        <result column="news_source" property="newsSource"/>
+        <result column="city_name" property="cityName"/>
+        <result column="news_issue_time" property="newsIssueTime"/>
+        <result column="news_content" property="newsContent"/>
+        <result column="operator_name" property="operatorName"/>
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="columns">
+        id, news_type, news_title, news_source, city_name, news_issue_time, news_content, operator_name, create_time, update_time
+    </sql>
+
+    <sql id="insertColumns">
+       news_title, news_source, city_name, news_issue_time, news_content, operator_name, create_time, update_time
+    </sql>
+
+    <sql id="queryConditions">
+        <trim prefix="where" suffix="" prefixOverrides="and">
+            <if test="condition != null">
+                <if test="condition.newsSource != null and condition.newsSource != ''">
+                    AND news_source = #{condition.newsSource}
+                </if>
+                <if test="condition.newsTitle != null and condition.newsTitle != ''">
+                    AND news_title = #{condition.newsTitle}
+                </if>
+                <if test="condition.newsIssueTime != null and condition.newsIssueTime != ''">
+                    AND news_issue_time = #{condition.newsIssueTime}
+                </if>
+                <if test="condition.id != null">
+                    AND id = #{condition.id}
+                </if>
+            </if>
+        </trim>
+    </sql>
+
+    <select id="getById" parameterType="java.lang.Long" resultMap="resultMap">
+        SELECT <include refid="columns" /> FROM train_news WHERE id = #{id}
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="query" resultMap="resultMap">
+        <include refid="MYSQL.paginationStart" />
+        select
+        <include refid="columns" />
+        FROM train_news
+        <include refid="queryConditions"/>
+        order by news_issue_time desc
+        <include refid="MYSQL.paginationEnd" />
+    </select>
+
+    <select id="count" parameterType="com.kindergarten.business.model.TrainNewsDto" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM train_news
+        <include refid="queryConditions"/>
+    </select>
+
+    <delete id="deleteById">
+        DELETE FROM train_news WHERE id = #{id}
+    </delete>
+
+    <update id="updateById" parameterType="com.kindergarten.business.model.TrainNewsDto">
+        <include refid="updateCondition"/>
+        WHERE id = #{id}
+    </update>
+
+    <sql id="updateCondition">
+        UPDATE train_news
+        <set>
+
+            <if test="i.newsTitle != null and i.newsTitle != ''">
+                news_title = #{i.newsTitle},
+            </if>
+            <if test="i.newsSource != null and i.newsSource != ''">
+                news_source = #{i.newsSource},
+            </if>
+            <if test="i.cityName != null and i.cityName != ''">
+                city_name = #{i.cityName},
+            </if>
+            <if test="i.newsIssueTime != null">
+                news_issue_time = #{i.newsIssueTime},
+            </if>
+            <if test="i.newsContent != null and i.newsContent != ''">
+                news_content = #{i.newsContent},
+            </if>
+            <if test="i.operatorName != null and i.operatorName != ''">
+                operator_name = #{i.operatorName},
+            </if>
+            <if test="i.updateTime != null">
+                update_time = #{i.updateTime},
+            </if>
+
+        </set>
+    </sql>
+
+    <insert id="insert" parameterType="com.kindergarten.business.model.TrainNewsDto" useGeneratedKeys="true" keyProperty="id">
+        insert into train_news
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <include refid="insertColumns" />
+        </trim>
+        values(#{newsTitle}, #{newsSource}, #{cityName}, #{newsIssueTime}, #{newsContent}, #{operatorName}, #{createTime}, #{updateTime})
+    </insert>
+
+    <insert id="insertBatch" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into train_news
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <include refid="insertColumns" />
+        </trim>
+        values
+        <foreach collection="list" item="item" separator="," index="index">
+            (#{item.newsTitle}, #{item.newsSource}, #{item.cityName}, #{item.newsIssueTime}, #{item.newsContent}, #{item.operatorName}, #{item.createTime}, #{item.updateTime})
+        </foreach>
+    </insert>
+
+    <select id="queryTrainNewsByTitleAndIssueTime" parameterType="java.util.List" resultMap="resultMap">
+        SELECT
+        <include refid="columns" />
+        FROM train_news
+        <trim prefix="where" suffix="" prefixOverrides="and">
+            <foreach collection="list" separator="or" item="item">
+                (news_title = #{item.newsTitle} AND news_issue_time = #{item.newsIssueTime}  AND valid_status = 'Y')
+            </foreach>
+        </trim>
+    </select>
+
+    <update id="updateBatchTrainNews" parameterType="java.util.List">
+        <foreach collection="list" item="i" index="index" open="" close="" separator=";">
+            <include refid="updateCondition"/>
+            WHERE id = #{i.id, jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+</mapper>

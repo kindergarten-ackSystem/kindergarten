@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysUser">
+
+    <resultMap id="resultMap" type="com.kindergarten.business.model.StudentInfo">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="student_no" property="studentNo" jdbcType="VARCHAR"/>
+        <result column="student_name" property="studentName" jdbcType="VARCHAR"/>
+        <result column="student_birthday" property="studentBirthday" jdbcType="VARCHAR"/>
+        <result column="student_gender" property="studentGender" jdbcType="VARCHAR"/>
+        <result column="student_class" property="studentClass" jdbcType="VARCHAR"/>
+        <result column="student_grade" property="studentGrade" jdbcType="VARCHAR"/>
+        <result column="enroll_time" property="enrollTime" jdbcType="TIMESTAMP"/>
+        <result column="tuition_fee" property="tuitionFee" jdbcType="VARCHAR"/>
+        <result column="student_email" property="studentEmail" jdbcType="VARCHAR"/>
+        <result column="student_phone" property="studentPhone" jdbcType="VARCHAR"/>
+        <result column="student_status" property="studentStatus" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columns">
+        id, student_no, student_name, student_birthday, student_gender, student_class, student_grade, enroll_time, tuition_fee, student_email,
+        student_phone, student_status, remark, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.kindergarten.business.model.StudentInfo">
+        INSERT INTO sys_employee
+        (<include refid="columns"/>)
+        VALUES
+        (
+            #{id, jdbcType=BIGINT},
+            #{studentNo, jdbcType=VARCHAR},
+            #{studentName, jdbcType=VARCHAR},
+            #{studentBirthday, jdbcType=VARCHAR},
+            #{studentGender, jdbcType=VARCHAR},
+            #{studentClass, jdbcType=VARCHAR},
+            #{studentGrade, jdbcType=VARCHAR},
+            #{enrollTime, jdbcType=VARCHAR},
+            #{studentEmail, jdbcType=VARCHAR},
+            #{studentPhone, jdbcType=VARCHAR},
+            #{studentStatus, jdbcType=VARCHAR},
+            #{remark, jdbcType=VARCHAR},
+            now(),
+            now()
+        )
+    </insert>
+
+    <update id="updateById" parameterType="com.kindergarten.business.model.SysEmployee">
+      UPDATE sys_employee
+      <set>
+          <if test="password != null and password != ''">
+              password = #{password},
+          </if>
+          <if test="employeePhone != null and employeePhone != ''">
+              employee_phone = #{employeePhone},
+          </if>
+          <if test="employeeEmail != null and employeeEmail != ''">
+              employee_email = #{employeeEmail},
+          </if>
+          <if test="employeeBirthday != null">
+              employee_birthday = #{employeeBirthday},
+          </if>
+          <if test="employeePosition != null and employeePosition != ''">
+              employee_position = #{employeePosition},
+          </if>
+          <if test="employeeEduSchool != null and employeeEduSchool != ''">
+              employee_edu_school = #{employeeEduSchool},
+          </if>
+          <if test="employeeDegree != null and employeeDegree != ''">
+              employee_degree = #{employee_degree},
+          </if>
+          <if test="employeeStatus != null and employeeStatus != ''">
+              employee_status = #{employeeStatus},
+          </if>
+          update_time = now()
+          WHERE id = #{id}
+      </set>
+    </update>
+
+    <!--根据id查询用户详情-->
+    <select id="queryByEmployeeName" parameterType="java.lang.String" resultMap="resultMap">
+        SELECT <include refid="columns"/> FROM sys_employee WHERE student_no =  #{employeeName, jdbcType=VARCHAR} AND employee_status = 1
+    </select>
+
+    <select id="queryAllEmployee" resultMap="resultMap">
+        <include refid="MYSQL.paginationStart" />
+        SELECT <include refid="columns"/>
+        FROM sys_employee
+        WHERE employee_status = 1
+        ORDER BY create_time DESC
+        <include refid="MYSQL.paginationEnd" />
+    </select>
+</mapper>

@@ -1,8 +1,9 @@
 package com.kindergarten.business.controller;
 
 import com.kindergarten.bootmain.base.BaseController;
-import com.kindergarten.business.model.SysUser;
-import com.kindergarten.business.service.SysUserService;
+import com.kindergarten.business.model.SysEmployee;
+import com.kindergarten.business.service.SysEmployeeService;
+import com.kindergarten.business.service.TrainNewsService;
 import com.kindergarten.common.ResponseEntity;
 import com.kindergarten.utils.MD5Util;
 import com.kindergarten.utils.ResultStatus;
@@ -17,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -36,7 +36,9 @@ public class LoginController extends BaseController{
     private final static Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
-    private SysUserService sysUserService;
+    private SysEmployeeService sysEmployeeService;
+    @Autowired
+    private TrainNewsService trainNewsService;
 
     /**
      * 登录
@@ -89,29 +91,36 @@ public class LoginController extends BaseController{
 
     /**
      * 注册
-     * @param sysUser
+     * @param sysEmployee
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "register", method = RequestMethod.POST)
-    public ResponseEntity register(@RequestBody SysUser sysUser){
+    public ResponseEntity register(@RequestBody SysEmployee sysEmployee){
         ResponseEntity responseEntity = new ResponseEntity();
-        if (StringUtils.isEmpty(sysUser.getUserName())){
+        if (StringUtils.isEmpty(sysEmployee.getEmployeeName())){
             responseEntity.setErrorMessage("用户名不能为空", ResultStatus.PARAMETER_EXCEPTION.getCode());
             return responseEntity;
         }
-        if(StringUtils.isEmpty(sysUser.getPassword())){
+        if(StringUtils.isEmpty(sysEmployee.getPassword())){
             responseEntity.setErrorMessage("密码不能为空", ResultStatus.PARAMETER_EXCEPTION.getCode());
             return responseEntity;
         }
         try{
-            sysUser.setPassword(MD5Util.getEncryptedString(sysUser.getPassword()));
-            sysUserService.insertUser(sysUser);
+            sysEmployee.setPassword(MD5Util.getEncryptedString(sysEmployee.getPassword()));
+            sysEmployeeService.insertEmployee(sysEmployee);
             responseEntity.setMessage("注册成功");
         }catch (Exception e){
             logger.error("注册失败", e);
             responseEntity.setErrorMessage("注册失败，请稍后再试", ResultStatus.INTERNAL_SERVER_ERROR.getCode());
         }
         return responseEntity;
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "testNews", method = RequestMethod.GET)
+    public void test(){
+        trainNewsService.insertBatch();
     }
 }

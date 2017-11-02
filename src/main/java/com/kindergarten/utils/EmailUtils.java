@@ -12,10 +12,12 @@ import javax.mail.util.ByteArrayDataSource;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -29,22 +31,24 @@ import java.util.Set;
  */
 public class EmailUtils {
 
-    /*public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         List<String> list = new ArrayList<String>();
         list.add("799178171@qq.com");
+        list.add("18801915767@163.com");
+        list.add("kasdasdas@qq.com");
 //        List<String> attachList = new ArrayList<>();
 //        attachList.add("");
-        EmailUtils.from("发送邮箱地址", "邮箱密码")
+        EmailUtils.from("18801915767@163.com", "songjiuhua83723")
 //                .to("")
                 //.to(list)
                 .cc(list)
-                .subject("邮件测试113")
+                .subject("文本")
                 .body("Dear 113,<br>ahahahahahahahahaha但是颠三倒四a")
                 .attachment("G:\\Project\\deployWar\\src\\main\\java\\com\\deploy\\comtroller\\TestController.java")
                 //.attachment("123.xlsx",new FileInputStream(new File("/Users/kevensong/project/td-utils/src/test/java/com/dooioo/td/utils/TestIs.java")))
 //                .attach(attachList)
                 .send();
-    }*/
+    }
 
     // 邮箱服务器信息
     private Properties props;
@@ -264,6 +268,8 @@ public class EmailUtils {
      * @param invalidAddresses
      */
     private void removeInValid(Address[] invalidAddresses) {
+        if (invalidAddresses == null)
+            return;
         for (Address address : invalidAddresses) {
             tos.remove(address);
             ccs.remove(address);

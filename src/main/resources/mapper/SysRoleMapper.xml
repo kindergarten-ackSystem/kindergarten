@@ -19,7 +19,7 @@
         id, role_cn_name, role_en_name, role_type, is_active, remark, creator, updater, status, create_time, update_time
     </sql>
 
-    <insert id="insert" parameterType="com.kindergarten.business.model.SysUser">
+    <insert id="insert" parameterType="com.kindergarten.business.model.SysEmployee">
         INSERT INTO sys_role
         (<include refid="columns"/>)
         VALUES

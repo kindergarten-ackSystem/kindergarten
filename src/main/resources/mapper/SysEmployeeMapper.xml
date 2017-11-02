@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SysEmployee">
+
+    <resultMap id="resultMap" type="com.kindergarten.business.model.SysEmployee">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="employee_name" property="employeeName" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="employee_phone" property="employeePhone" jdbcType="VARCHAR"/>
+        <result column="employee_email" property="employeeEmail" jdbcType="VARCHAR"/>
+        <result column="employee_birthday" property="employeeBirthday" jdbcType="TIMESTAMP"/>
+        <result column="employee_position" property="employeePosition" jdbcType="BIGINT"/>
+        <result column="employee_edu_school" property="employeeEduSchool" jdbcType="VARCHAR"/>
+        <result column="employee_degree" property="employeeDegree" jdbcType="VARCHAR"/>
+        <result column="employee_status" property="employeeStatus" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columns">
+        id, employee_name, password, employee_phone, employee_email, employee_birthday, employee_position, employee_edu_school, employee_degree, employee_status,
+        create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.kindergarten.business.model.SysEmployee">
+        INSERT INTO sys_employee
+        (<include refid="columns"/>)
+        VALUES
+        (
+            #{id, jdbcType=BIGINT},
+            #{employeeName, jdbcType=VARCHAR},
+            #{password, jdbcType=VARCHAR},
+            #{employeePhone, jdbcType=VARCHAR},
+            #{employeeEmail, jdbcType=VARCHAR},
+            #{employeeBirthday, jdbcType=TIMESTAMP},
+            #{employeePosition, jdbcType=VARCHAR},
+            #{employeeEduSchool, jdbcType=VARCHAR},
+            #{employeeDegree, jdbcType=VARCHAR},
+            1,
+            now(),
+            now()
+        )
+    </insert>
+
+    <update id="updateById" parameterType="com.kindergarten.business.model.SysEmployee">
+      UPDATE sys_employee
+      <set>
+          <if test="password != null and password != ''">
+              password = #{password},
+          </if>
+          <if test="employeePhone != null and employeePhone != ''">
+              employee_phone = #{employeePhone},
+          </if>
+          <if test="employeeEmail != null and employeeEmail != ''">
+              employee_email = #{employeeEmail},
+          </if>
+          <if test="employeeBirthday != null">
+              employee_birthday = #{employeeBirthday},
+          </if>
+          <if test="employeePosition != null and employeePosition != ''">
+              employee_position = #{employeePosition},
+          </if>
+          <if test="employeeEduSchool != null and employeeEduSchool != ''">
+              employee_edu_school = #{employeeEduSchool},
+          </if>
+          <if test="employeeDegree != null and employeeDegree != ''">
+              employee_degree = #{employee_degree},
+          </if>
+          <if test="employeeStatus != null and employeeStatus != ''">
+              employee_status = #{employeeStatus},
+          </if>
+          update_time = now()
+          WHERE id = #{id}
+      </set>
+    </update>
+
+    <!--根据id查询用户详情-->
+    <select id="queryByEmployeeName" parameterType="java.lang.String" resultMap="resultMap">
+        SELECT <include refid="columns"/> FROM sys_employee WHERE employee_name =  #{employeeName, jdbcType=VARCHAR} AND employee_status = 1
+    </select>
+
+    <select id="queryAllEmployee" resultMap="resultMap">
+        <include refid="MYSQL.paginationStart" />
+        SELECT <include refid="columns"/>
+        FROM sys_employee
+        WHERE employee_status = 1
+        ORDER BY create_time DESC
+        <include refid="MYSQL.paginationEnd" />
+    </select>
+</mapper>

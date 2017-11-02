@@ -153,24 +153,7 @@
                 </configuration>
                 <version>3.0</version>
             </plugin>
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-eclipse-plugin</artifactId>-->
-                <!--<configuration>-->
-                    <!--<wtpContextName>/</wtpContextName>-->
-                    <!--<wtpversion>2.0</wtpversion>-->
-                    <!--<projectNameTemplate>project</projectNameTemplate>-->
-                    <!--<additionalConfig>-->
-                        <!--<file>-->
-                            <!--<name>.settings/org.eclipse.core.resources.prefs</name>-->
-                            <!--<content>-->
-                                <!--<![CDATA[eclipse.preferences.version=1${line.separator}encoding/<project>=${project.build.sourceEncoding}${line.separator}]]>-->
-                            <!--</content>-->
-                        <!--</file>-->
-                    <!--</additionalConfig>-->
-                <!--</configuration>-->
-                <!--<version>2.9</version>-->
-            <!--</plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -189,6 +172,5 @@
             </plugin>
 
         </plugins>
-        <!--<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>-->
     </build>
 </project>
